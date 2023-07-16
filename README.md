@@ -15,15 +15,15 @@ Shiba-Py-Mysql is a lightweight Python library that provides a convenient interf
 You can install Shiba-Py-Mysql using pip:
 
 ```shell
-pip install shiba-py-mysql
+pip install shiba-mysql
 ```
 
 ```python
 
-from shiba import ShibaConnection
+import shiba as s
 
 # Create a connection to the MySQL database
-connection = ShibaConnection(host='localhost', port=3306, user='myuser', password='mypassword')
+connection = s.ShibaConnection(host='localhost', port=3306, user='myuser', password='mypassword')
 
 # Create a new database
 connection.create_database('my_database')
