@@ -1,4 +1,4 @@
-from src import ShibaConnection
+from shiba.__init__ import ShibaConnection
 
 import json
 

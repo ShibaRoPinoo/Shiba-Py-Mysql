@@ -9,6 +9,7 @@ class ShibaConnection:
     
     def create_database(self, database):
         return self.db.create_database(database)
+        
     def use_database(self, database):
         return self.db.selected_database(database)
     
@@ -16,4 +17,4 @@ class ShibaConnection:
         return TableBuilder(self.db, table_name)
     
     def table(self, table_name):
-        return QueryBuilder(self.db, table_name)
+        return QueryBuilder(self.db, table_name)    
