@@ -1,49 +1,44 @@
-# The `TableBuilder` class is a Python class that helps in building SQL table creation queries by
-# providing methods to add columns with different data types and constraints.
+
+from shibamysql.missing_data_error import MissingDataError
+
 class TableBuilder:
-
-    """
-    The function initializes an object with a database, table name, and an empty list of columns.
-
-    :param database: The `database` parameter is used to specify the name or connection object of
-    the database that you want to work with. It can be a string representing the name of the
-    database or an object representing a connection to the database
-    :param table_name: The `table_name` parameter is a string that represents the name of the table
-    in the database. It is used to specify which table the code will be interacting with
-    """
-
     def __init__(self, database, table_name) -> None:
         self.db = database
         self.table_name = table_name
         self.columns = []
 
-    """
-    The function increments adds a new column to a table with an auto-incrementing primary key.
-    
-    :param column_name: The parameter `column_name` is a string that represents the name of the
-    column that you want to add to your table. By default, it is set to 'id', defaults to id
-    (optional)
-    :return: The method is returning the instance of the class itself, allowing for method chaining.
-    """
-
     def increments(self, column_name='id', primary_key=False):
+        if not column_name:
+            raise MissingDataError("El nombre de la columna no puede estar vacío.")
+        
         self.columns.append(
-            f"{column_name} INT AUTO_INCREMENT {'' if not primary_key else 'PRIMARY KEY'}")
+            f"{column_name} INT AUTO_INCREMENT {'' if not primary_key else 'PRIMARY KEY'}"
+        )
         return self
 
     def primary(self):
+        if not self.columns:
+            raise MissingDataError("No se ha agregado ninguna columna.")
+        
         current_column = self.columns[-1]
-        if not 'PRIMARY KEY' in current_column:
-            self.columns[-1] += f"PRIMARY KEY"
+        if 'PRIMARY KEY' not in current_column:
+            self.columns[-1] += " PRIMARY KEY"
         return self
 
     def unique(self):
+        if not self.columns:
+            raise MissingDataError("No se ha agregado ninguna columna.")
+        
         self.columns[-1] += " UNIQUE"
-        return self
 
     def foreign(self, foreign_name=None, table_name=None, column_name=None):
+        if not self.columns:
+            raise MissingDataError("No se ha agregado ninguna columna.")
+        if not foreign_name or not table_name or not column_name:
+            raise MissingDataError("Falta uno o más parámetros requeridos para la restricción FOREIGN KEY.")
+
         current_column = self.columns[-1]
-        current_column_name = current_column.split()[0]  # get column position
+        current_column_name = current_column.split()[0]  # Obtener la posición de la columna
         self.columns[-1] += f", CONSTRAINT {foreign_name} FOREIGN KEY ({current_column_name}) REFERENCES {table_name}({column_name})"
         return self
     
@@ -114,6 +109,9 @@ class TableBuilder:
         return self
 
     def build(self):
+        if not self.columns:
+            raise MissingDataError("No se ha agregado ninguna columna.")
+        
         query = f"CREATE TABLE IF NOT EXISTS {str(self.table_name)} ("
         query += ", ".join(self.columns)
         query += ");"

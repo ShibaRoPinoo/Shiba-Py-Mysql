@@ -1,6 +1,6 @@
-from shiba.database import Database
-from shiba.query_builder import QueryBuilder
-from shiba.table_builder import TableBuilder
+from shibamysql.database import Database
+from shibamysql.table_builder import TableBuilder
+from shibamysql.query_builder import QueryBuilder
 
 class ShibaConnection:
 
