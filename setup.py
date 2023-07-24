@@ -14,7 +14,7 @@ classifiers = [
 
 setup(
     name='shiba_mysql',
-    version='1.1.1',
+    version='1.2.0',
     description='A library to interact with MySQL',
     long_description=open('README.md').read() + '\n\n' + open('CHANGELOG.txt').read(),
     long_description_content_type='text/markdown',
